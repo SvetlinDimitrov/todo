@@ -14,7 +14,7 @@ public class UpdateTaskValidator {
       throw new BadResponseException("Name should be less than 255 characters");
     }
 
-    if (dto.description() != null && dto.description().trim().length() > 255) {
+    if (dto.description() == null || dto.description().trim().length() > 255) {
       throw new BadResponseException("Description should be less than 255 characters");
     }
   }
