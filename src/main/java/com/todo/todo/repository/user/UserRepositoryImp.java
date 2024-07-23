@@ -1,11 +1,10 @@
 package com.todo.todo.repository.user;
 
-import com.todo.todo.model.entity.UserEntity;
 import com.todo.todo.model.views.User;
+import com.todo.todo.utils.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Repository
@@ -17,20 +16,11 @@ public class UserRepositoryImp implements UserRepository {
   @Override
   public Optional<User> findByEmail(String email) {
     return userRepositoryJpa.findByEmail(email)
-        .map(this::toUser);
+        .map(UserMapper::toUser);
   }
 
   @Override
   public void saveUser(User user) {
-    userRepositoryJpa.save(toUserEntity(user));
-  }
-
-
-  private User toUser(UserEntity userEntity) {
-    return new User(userEntity.getEmail(), userEntity.getPassword());
-  }
-
-  private UserEntity toUserEntity(User user) {
-    return new UserEntity(user.email(), user.password(), new ArrayList<>());
+    userRepositoryJpa.save(UserMapper.toUserEntity(user));
   }
 }

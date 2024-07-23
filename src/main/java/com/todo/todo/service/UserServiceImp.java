@@ -4,7 +4,7 @@ import com.todo.todo.exceptions.BadResponseException;
 import com.todo.todo.model.dto.CreateUser;
 import com.todo.todo.model.views.User;
 import com.todo.todo.repository.user.UserRepository;
-import com.todo.todo.validator.CreateUserValidator;
+import com.todo.todo.utils.validator.CreateUserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

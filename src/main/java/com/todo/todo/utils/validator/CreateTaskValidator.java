@@ -1,4 +1,4 @@
-package com.todo.todo.validator;
+package com.todo.todo.utils.validator;
 
 import com.todo.todo.exceptions.BadResponseException;
 import com.todo.todo.model.dto.CreateTask;

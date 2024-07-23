@@ -1,4 +1,4 @@
-package com.todo.todo.validator;
+package com.todo.todo.utils.validator;
 
 public class PageableValidator {
 

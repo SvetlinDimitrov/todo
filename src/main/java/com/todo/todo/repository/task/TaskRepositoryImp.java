@@ -3,6 +3,7 @@ package com.todo.todo.repository.task;
 import com.todo.todo.exceptions.BadResponseException;
 import com.todo.todo.model.entity.TaskEntity;
 import com.todo.todo.model.views.Task;
+import com.todo.todo.utils.mappers.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +19,12 @@ public class TaskRepositoryImp implements TaskRepository {
 
   @Override
   public Page<Task> findAllByTaskId(Long taskId, Pageable pageable) {
-    return taskRepositoryJpa.findAllByProject_Id(taskId, pageable).map(this::toTask);
+    return taskRepositoryJpa.findAllByProject_Id(taskId, pageable).map(TaskMapper::toTask);
   }
 
   @Override
   public Optional<Task> findByIdAndUserEmail(Long id, String userEmail) {
-    return taskRepositoryJpa.findByIdAndProject_User_Email(id, userEmail).map(this::toTask);
+    return taskRepositoryJpa.findByIdAndProject_User_Email(id, userEmail).map(TaskMapper::toTask);
   }
 
   @Override
@@ -35,7 +36,7 @@ public class TaskRepositoryImp implements TaskRepository {
     entity.setDescription(task.description());
     entity.setDone(task.done());
 
-    return toTask(taskRepositoryJpa.save(entity));
+    return TaskMapper.toTask(taskRepositoryJpa.save(entity));
   }
 
   @Override
@@ -46,26 +47,13 @@ public class TaskRepositoryImp implements TaskRepository {
     entity.setDescription(task.description());
     entity.setDone(task.done());
 
-    return toTask(taskRepositoryJpa.save(entity));
+    return TaskMapper.toTask(taskRepositoryJpa.save(entity));
   }
 
   @Override
   public void delete(Task task) {
-    taskRepositoryJpa.delete(toTaskEntity(task));
+    taskRepositoryJpa.delete(TaskMapper.toTaskEntity(task));
   }
 
-  private Task toTask(TaskEntity taskEntity) {
-    return new Task(taskEntity.getId(), taskEntity.getName(), taskEntity.getDescription(), taskEntity.getDone());
-  }
 
-  private TaskEntity toTaskEntity(Task task) {
-    TaskEntity entity = new TaskEntity();
-
-    entity.setId(task.id());
-    entity.setName(task.name());
-    entity.setDescription(task.description());
-    entity.setDone(task.done());
-
-    return entity;
-  }
 }
