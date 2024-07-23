@@ -29,7 +29,7 @@ public class ProjectMapper {
     entity.setProjects(
         project.tasks()
             .stream()
-            .map(TaskMapper::toTaskEntity)
+            .map(t -> TaskMapper.toTaskEntity(t, entity))
             .toList()
     );
     entity.setUser(user);

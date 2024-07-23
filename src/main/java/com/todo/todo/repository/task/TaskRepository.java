@@ -8,9 +8,13 @@ import java.util.Optional;
 
 public interface TaskRepository {
 
-  Page<Task> findAllByTaskId(Long taskId , Pageable pageable);
+  Page<Task> findAllByTaskIdAndUserEmail(Long taskId, String email, Pageable pageable);
+
   Optional<Task> findByIdAndUserEmail(Long id , String userEmail);
-  Task update(Task task);
-  Task save(Task task , Long projectId);
+
+  void update(Task task);
+
+  void save(Task task);
+
   void delete(Task task);
 }

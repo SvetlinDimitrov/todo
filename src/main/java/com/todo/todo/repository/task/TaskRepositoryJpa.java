@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface TaskRepositoryJpa extends JpaRepository<TaskEntity, Long> {
 
-  Page<TaskEntity> findAllByProject_Id(Long projectId, Pageable pageable);
+  Page<TaskEntity> findAllByProject_IdAndProject_User_Email(Long projectId, String userEmail ,Pageable pageable);
 
   Optional<TaskEntity> findByIdAndProject_User_Email(Long id , String userEmail);
 }

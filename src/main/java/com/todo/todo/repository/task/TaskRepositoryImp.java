@@ -1,8 +1,9 @@
 package com.todo.todo.repository.task;
 
-import com.todo.todo.exceptions.BadResponseException;
+import com.todo.todo.model.entity.ProjectEntity;
 import com.todo.todo.model.entity.TaskEntity;
 import com.todo.todo.model.views.Task;
+import com.todo.todo.repository.project.ProjectRepositoryJpa;
 import com.todo.todo.utils.mappers.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,10 +17,11 @@ import java.util.Optional;
 public class TaskRepositoryImp implements TaskRepository {
 
   private final TaskRepositoryJpa taskRepositoryJpa;
+  private final ProjectRepositoryJpa projectRepositoryJpa;
 
   @Override
-  public Page<Task> findAllByTaskId(Long taskId, Pageable pageable) {
-    return taskRepositoryJpa.findAllByProject_Id(taskId, pageable).map(TaskMapper::toTask);
+  public Page<Task> findAllByTaskIdAndUserEmail(Long taskId, String userEmail, Pageable pageable) {
+    return taskRepositoryJpa.findAllByProject_IdAndProject_User_Email(taskId, userEmail, pageable).map(TaskMapper::toTask);
   }
 
   @Override
@@ -28,32 +30,29 @@ public class TaskRepositoryImp implements TaskRepository {
   }
 
   @Override
-  public Task update(Task task) {
-    TaskEntity entity = taskRepositoryJpa.findById(task.id())
-        .orElseThrow(() -> new BadResponseException("Task not found"));
-
-    entity.setName(task.name());
-    entity.setDescription(task.description());
-    entity.setDone(task.done());
-
-    return TaskMapper.toTask(taskRepositoryJpa.save(entity));
+  public void update(Task task) {
+    save(task);
   }
 
   @Override
-  public Task save(Task task , Long projectId) {
-    TaskEntity entity = new TaskEntity();
+  public void save(Task task) {
+    TaskEntity taskEntity = getTaskEntity(task);
 
-    entity.setName(task.name());
-    entity.setDescription(task.description());
-    entity.setDone(task.done());
-
-    return TaskMapper.toTask(taskRepositoryJpa.save(entity));
+    taskRepositoryJpa.save(taskEntity);
   }
 
   @Override
   public void delete(Task task) {
-    taskRepositoryJpa.delete(TaskMapper.toTaskEntity(task));
+    TaskEntity taskEntity = getTaskEntity(task);
+
+    taskRepositoryJpa.delete(taskEntity);
   }
 
+  private TaskEntity getTaskEntity(Task task) {
+    ProjectEntity projectEntity = projectRepositoryJpa.findById(task.projectId())
+        .orElseThrow();
+
+    return TaskMapper.toTaskEntity(task, projectEntity);
+  }
 
 }

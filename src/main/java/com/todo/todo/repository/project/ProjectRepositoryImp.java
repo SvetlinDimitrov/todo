@@ -1,5 +1,6 @@
 package com.todo.todo.repository.project;
 
+import com.todo.todo.model.entity.ProjectEntity;
 import com.todo.todo.model.entity.UserEntity;
 import com.todo.todo.model.views.Project;
 import com.todo.todo.repository.user.UserRepositoryJpa;
@@ -20,26 +21,21 @@ public class ProjectRepositoryImp implements ProjectRepository {
 
   @Override
   public void save(Project project) {
-    UserEntity user = userRepositoryJpa.findByEmail(project.userEmail())
-        .orElseThrow(() -> new RuntimeException("User not found"));
+    ProjectEntity projectEntity = getProjectEntity(project);
 
-    repositoryJpa.save(ProjectMapper.toProjectEntity(project, user));
+    repositoryJpa.save(projectEntity);
   }
 
   @Override
   public void update(Project project) {
-    UserEntity user = userRepositoryJpa.findByEmail(project.userEmail())
-        .orElseThrow(() -> new RuntimeException("User not found"));
-
-    repositoryJpa.save(ProjectMapper.toProjectEntity(project, user));
+    save(project);
   }
 
   @Override
   public void delete(Project project) {
-    UserEntity user = userRepositoryJpa.findByEmail(project.userEmail())
-        .orElseThrow(() -> new RuntimeException("User not found"));
+    ProjectEntity projectEntity = getProjectEntity(project);
 
-    repositoryJpa.delete(ProjectMapper.toProjectEntity(project , user));
+    repositoryJpa.delete(projectEntity);
   }
 
   @Override
@@ -52,5 +48,12 @@ public class ProjectRepositoryImp implements ProjectRepository {
   public Page<Project> findAllByUserEmail(Pageable pageable, String userEmail) {
     return repositoryJpa.findAllByUser_Email(userEmail, pageable)
         .map(ProjectMapper::toProject);
+  }
+
+  private ProjectEntity getProjectEntity(Project project) {
+    UserEntity user = userRepositoryJpa.findByEmail(project.userEmail())
+        .orElseThrow(() -> new RuntimeException("User not found"));
+
+    return ProjectMapper.toProjectEntity(project, user);
   }
 }
