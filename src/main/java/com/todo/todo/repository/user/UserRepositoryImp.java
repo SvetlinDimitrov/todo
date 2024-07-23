@@ -5,6 +5,7 @@ import com.todo.todo.model.views.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Repository
@@ -19,8 +20,17 @@ public class UserRepositoryImp implements UserRepository {
         .map(this::toUser);
   }
 
+  @Override
+  public void saveUser(User user) {
+    userRepositoryJpa.save(toUserEntity(user));
+  }
+
 
   private User toUser(UserEntity userEntity) {
     return new User(userEntity.getEmail(), userEntity.getPassword());
+  }
+
+  private UserEntity toUserEntity(User user) {
+    return new UserEntity(user.email(), user.password(), new ArrayList<>());
   }
 }

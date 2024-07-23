@@ -1,4 +1,4 @@
-package com.todo.todo.services;
+package com.todo.todo.service;
 
 import com.todo.todo.model.views.User;
 import com.todo.todo.repository.user.UserRepository;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserDetailsServiceImp implements UserDetailsService {
+public class UserDetailsAuthImp implements UserDetailsService {
 
   private final UserRepository userRepository;
 
