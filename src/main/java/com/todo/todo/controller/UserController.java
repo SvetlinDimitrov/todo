@@ -17,7 +17,7 @@ public class UserController {
 
   private final UserServiceImp service;
 
-  @PostMapping("/create")
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public void createUser(@RequestBody CreateUser createUserDto) {
     service.createUser(createUserDto);
