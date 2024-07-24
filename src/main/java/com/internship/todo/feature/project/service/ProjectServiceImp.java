@@ -4,11 +4,11 @@ import com.internship.todo.feature.project.dto.ProjectPostPutRequest;
 import com.internship.todo.feature.project.dto.ProjectView;
 import com.internship.todo.feature.project.entity.ProjectEntity;
 import com.internship.todo.feature.project.repository.ProjectRepository;
-import com.internship.todo.feature.project.utils.mappers.ProjectMapper;
 import com.internship.todo.feature.user.entity.UserEntity;
 import com.internship.todo.feature.user.repository.UserRepository;
 import com.internship.todo.infrastructure.security.service.UserDetailsAuthImp;
 import com.internship.todo.infrastructure.shared.exceptions.BadResponseException;
+import com.internship.todo.infrastructure.shared.mappers.ProjectMapper;
 import com.internship.todo.infrastructure.shared.validatiors.PageableValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +25,7 @@ public class ProjectServiceImp implements ProjectService {
   private final ProjectRepository projectRepository;
   private final UserRepository userRepository;
   private final UserDetailsAuthImp userDetailsAuthImp;
+  private final ProjectMapper projectMapper;
 
   public Page<ProjectView> getProjects(int page, int size) {
 
@@ -34,12 +35,12 @@ public class ProjectServiceImp implements ProjectService {
 
     return projectRepository
         .findAllByUser_Email(userDetailsAuthImp.getUsernameFromUserSecurity(), pageable)
-        .map(ProjectMapper::toProject);
+        .map(projectMapper::toProjectView);
   }
 
   public ProjectView getProject(Long id) {
 
-    return ProjectMapper.toProject(getEntityByIdAndUserEmail(id));
+    return projectMapper.toProjectView(getEntityByIdAndUserEmail(id));
   }
 
   public void createProject(ProjectPostPutRequest dto) {
@@ -49,8 +50,8 @@ public class ProjectServiceImp implements ProjectService {
     UserEntity user = userRepository.findByEmail(userEmail)
         .orElseThrow(() -> new BadResponseException("User not found"));
 
-    ProjectEntity projectToUpdateAndSave = ProjectMapper.toProjectEntity(dto);
-    projectToUpdateAndSave.setProjects(new ArrayList<>());
+    ProjectEntity projectToUpdateAndSave = projectMapper.toProjectEntity(dto);
+    projectToUpdateAndSave.setTasks(new ArrayList<>());
     projectToUpdateAndSave.setUser(user);
 
     projectRepository.save(projectToUpdateAndSave);

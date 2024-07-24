@@ -1,8 +1,7 @@
 package com.internship.todo.infrastructure.security.service;
 
-import com.internship.todo.feature.user.dto.UserView;
+import com.internship.todo.feature.user.entity.UserEntity;
 import com.internship.todo.feature.user.repository.UserRepository;
-import com.internship.todo.feature.user.utils.mappers.UserMapper;
 import com.internship.todo.infrastructure.security.dto.UserDetailsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -21,7 +20,6 @@ public class UserDetailsAuthImp implements UserDetailsService , UserAuthService 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     return userRepository.findByEmail(email)
-        .map(UserMapper::toUser)
         .map(this::toUserAuth)
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
   }
@@ -31,7 +29,7 @@ public class UserDetailsAuthImp implements UserDetailsService , UserAuthService 
     return authentication.getName();
   }
 
-  private UserDetailsDto toUserAuth(UserView user) {
+  private UserDetailsDto toUserAuth(UserEntity user) {
     return new UserDetailsDto(user);
   }
 }

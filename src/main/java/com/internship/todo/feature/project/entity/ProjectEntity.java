@@ -27,7 +27,7 @@ public class ProjectEntity {
       orphanRemoval = true,
       cascade = {CascadeType.REMOVE}
   )
-  private List<TaskEntity> projects;
+  private List<TaskEntity> tasks;
 
   @ManyToOne
   private UserEntity user;

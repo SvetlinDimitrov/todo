@@ -7,7 +7,7 @@ import com.internship.todo.feature.task.dto.TaskPutRequest;
 import com.internship.todo.feature.task.dto.TaskView;
 import com.internship.todo.feature.task.entity.TaskEntity;
 import com.internship.todo.feature.task.repository.TaskRepository;
-import com.internship.todo.feature.task.utils.mappers.TaskMapper;
+import com.internship.todo.infrastructure.shared.mappers.TaskMapper;
 import com.internship.todo.infrastructure.security.service.UserDetailsAuthImp;
 import com.internship.todo.infrastructure.shared.exceptions.BadResponseException;
 import com.internship.todo.infrastructure.shared.validatiors.PageableValidator;
@@ -24,6 +24,7 @@ public class TaskServiceImp implements TaskService {
   private final TaskRepository taskRepository;
   private final ProjectRepository projectRepository;
   private final UserDetailsAuthImp userDetailsAuthImp;
+  private final TaskMapper taskMapper;
 
   public Page<TaskView> getTasks(Long projectId, int page, int size) {
     String userEmail = userDetailsAuthImp.getUsernameFromUserSecurity();
@@ -33,12 +34,12 @@ public class TaskServiceImp implements TaskService {
     Pageable pageable = PageRequest.of(page, size);
 
     return taskRepository.findAllByProject_IdAndProject_User_Email(projectId, userEmail, pageable)
-        .map(TaskMapper::toTask);
+        .map(taskMapper::toTask);
   }
 
   public TaskView getTask(Long id) {
 
-    return TaskMapper.toTask(getTaskEntityByIdAndUserEmail(id));
+    return taskMapper.toTask(getTaskEntityByIdAndUserEmail(id));
   }
 
   public void createTask(TaskPostRequest dto, Long projectId) {
@@ -47,7 +48,7 @@ public class TaskServiceImp implements TaskService {
     ProjectEntity project = projectRepository.findByIdAndUser_Email(projectId, userEmail)
         .orElseThrow(() -> new BadResponseException("Project not found"));
 
-    TaskEntity taskToSave = TaskMapper.toTaskEntity(dto);
+    TaskEntity taskToSave = taskMapper.toTaskEntity(dto);
     taskToSave.setProject(project);
 
     taskRepository.save(taskToSave);
