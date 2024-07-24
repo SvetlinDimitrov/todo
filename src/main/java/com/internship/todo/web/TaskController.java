@@ -4,16 +4,16 @@ import com.internship.todo.feature.task.dto.TaskPostRequest;
 import com.internship.todo.feature.task.dto.TaskPutRequest;
 import com.internship.todo.feature.task.dto.TaskView;
 import com.internship.todo.feature.task.service.TaskService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/task")
+@RequestMapping("/api/v1/task")
 public class TaskController {
 
   private final TaskService service;
@@ -33,13 +33,13 @@ public class TaskController {
   }
 
   @PostMapping
-  public ResponseEntity<?> createTask(@RequestBody TaskPostRequest task, @RequestParam Long projectId) {
+  public ResponseEntity<?> createTask(@RequestParam Long projectId, @Valid @RequestBody TaskPostRequest task) {
     service.createTask(task, projectId);
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskPutRequest task) {
+  public ResponseEntity<?> updateTask(@PathVariable Long id, @Valid @RequestBody TaskPutRequest task) {
     service.updateTask(id, task);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }

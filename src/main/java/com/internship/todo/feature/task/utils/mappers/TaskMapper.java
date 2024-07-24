@@ -16,7 +16,7 @@ public class TaskMapper {
     entity.setId(null);
     entity.setName(task.name());
     entity.setDescription(task.description());
-    entity.setDone(task.done());
+    entity.setDone(task.done() != null ? task.done() : false);
     entity.setProject(null);
 
     return entity;

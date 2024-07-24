@@ -1,6 +1,6 @@
 package com.internship.todo.feature.project.utils.mappers;
 
-import com.internship.todo.feature.project.dto.ProjectPostRequest;
+import com.internship.todo.feature.project.dto.ProjectPostPutRequest;
 import com.internship.todo.feature.project.dto.ProjectView;
 import com.internship.todo.feature.project.entity.ProjectEntity;
 import com.internship.todo.feature.task.utils.mappers.TaskMapper;
@@ -19,7 +19,7 @@ public class ProjectMapper {
     );
   }
 
-  public static ProjectEntity toProjectEntity(ProjectPostRequest project) {
+  public static ProjectEntity toProjectEntity(ProjectPostPutRequest project) {
     ProjectEntity entity = new ProjectEntity();
 
     entity.setId(null);

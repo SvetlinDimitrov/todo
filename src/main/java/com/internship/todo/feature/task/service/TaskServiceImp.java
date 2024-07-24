@@ -8,8 +8,6 @@ import com.internship.todo.feature.task.dto.TaskView;
 import com.internship.todo.feature.task.entity.TaskEntity;
 import com.internship.todo.feature.task.repository.TaskRepository;
 import com.internship.todo.feature.task.utils.mappers.TaskMapper;
-import com.internship.todo.feature.task.utils.validators.CreateTaskValidator;
-import com.internship.todo.feature.task.utils.validators.UpdateTaskValidator;
 import com.internship.todo.infrastructure.security.service.UserDetailsAuthImp;
 import com.internship.todo.infrastructure.shared.exceptions.BadResponseException;
 import com.internship.todo.infrastructure.shared.validatiors.PageableValidator;
@@ -49,8 +47,6 @@ public class TaskServiceImp implements TaskService {
     ProjectEntity project = projectRepository.findByIdAndUser_Email(projectId, userEmail)
         .orElseThrow(() -> new BadResponseException("Project not found"));
 
-    CreateTaskValidator.validate(dto);
-
     TaskEntity taskToSave = TaskMapper.toTaskEntity(dto);
     taskToSave.setProject(project);
 
@@ -58,7 +54,6 @@ public class TaskServiceImp implements TaskService {
   }
 
   public void updateTask(Long id, TaskPutRequest dto) {
-    UpdateTaskValidator.validate(dto);
 
     TaskEntity taskToUpdateAndSave = getTaskEntityByIdAndUserEmail(id);
     taskToUpdateAndSave.setName(dto.name());

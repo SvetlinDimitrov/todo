@@ -4,7 +4,6 @@ import com.internship.todo.feature.user.dto.UserPostRequest;
 import com.internship.todo.feature.user.dto.UserView;
 import com.internship.todo.feature.user.repository.UserRepository;
 import com.internship.todo.feature.user.utils.mappers.UserMapper;
-import com.internship.todo.feature.user.utils.validators.CreateUserValidator;
 import com.internship.todo.infrastructure.shared.exceptions.BadResponseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +17,6 @@ public class UserServiceImp implements UserService {
   private final PasswordEncoder passwordEncoder;
 
   public void createUser(UserPostRequest dto) {
-    CreateUserValidator.validate(dto);
 
     if (userRepository.findByEmail(dto.email()).isPresent())
       throw new BadResponseException("User already exists");

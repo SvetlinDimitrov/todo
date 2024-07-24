@@ -1,7 +1,6 @@
 package com.internship.todo.feature.project.service;
 
-import com.internship.todo.feature.project.dto.ProjectPostRequest;
-import com.internship.todo.feature.project.dto.ProjectPutRequest;
+import com.internship.todo.feature.project.dto.ProjectPostPutRequest;
 import com.internship.todo.feature.project.dto.ProjectView;
 import org.springframework.data.domain.Page;
 
@@ -11,9 +10,9 @@ public interface ProjectService {
 
   ProjectView getProject(Long id);
 
-  void createProject(ProjectPostRequest dto);
+  void createProject(ProjectPostPutRequest dto);
 
-  void updateProject(Long id, ProjectPutRequest dto);
+  void updateProject(Long id, ProjectPostPutRequest dto);
 
   void deleteProject(Long id);
 }
