@@ -2,6 +2,7 @@ package com.internship.todo.feature.task.service;
 
 import com.internship.todo.feature.project.entity.ProjectEntity;
 import com.internship.todo.feature.project.repository.ProjectRepository;
+import com.internship.todo.feature.task.dto.TaskPageableRequest;
 import com.internship.todo.feature.task.dto.TaskPostRequest;
 import com.internship.todo.feature.task.dto.TaskPutRequest;
 import com.internship.todo.feature.task.dto.TaskView;
@@ -10,7 +11,6 @@ import com.internship.todo.feature.task.repository.TaskRepository;
 import com.internship.todo.infrastructure.security.service.UserDetailsAuthImp;
 import com.internship.todo.infrastructure.shared.exceptions.BadResponseException;
 import com.internship.todo.infrastructure.shared.mappers.TaskMapper;
-import com.internship.todo.infrastructure.shared.validatiors.PageableValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,12 +28,13 @@ public class TaskServiceImp implements TaskService {
   private final UserDetailsAuthImp userDetailsAuthImp;
   private final TaskMapper taskMapper;
 
-  public Page<TaskView> getTasks(Long projectId, int page, int size) {
+  public Page<TaskView> getTasks(Long projectId, TaskPageableRequest dto) {
     String userEmail = userDetailsAuthImp.getUsernameFromUserSecurity();
 
-    PageableValidator.validate(page , size);
-
-    Pageable pageable = PageRequest.of(page, size);
+    Pageable pageable = PageRequest.of(
+        dto.page() == null ? 0 : dto.page(),
+        dto.size() == null ? 10 : dto.size()
+    );
 
     return taskRepository.findAllByProject_IdAndProject_User_Email(projectId, userEmail, pageable)
         .map(taskMapper::toTask);

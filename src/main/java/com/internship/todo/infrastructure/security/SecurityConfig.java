@@ -21,6 +21,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
+        // I am doing this just for the practice of the course, in a real application I would not do this
         .cors(cors -> cors.configurationSource(request -> {
           CorsConfiguration config = new CorsConfiguration();
           config.setAllowedOrigins(Arrays.asList("*"));

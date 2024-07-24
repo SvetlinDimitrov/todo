@@ -1,5 +1,6 @@
 package com.internship.todo.web;
 
+import com.internship.todo.feature.task.dto.TaskPageableRequest;
 import com.internship.todo.feature.task.dto.TaskPostRequest;
 import com.internship.todo.feature.task.dto.TaskPutRequest;
 import com.internship.todo.feature.task.dto.TaskView;
@@ -18,18 +19,17 @@ public class TaskController {
 
   private final TaskService service;
 
-  @GetMapping
-  public ResponseEntity<Page<TaskView>> getTasks(
-      @RequestParam Long projectId,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "15") int size
-  ) {
-    return ResponseEntity.ok(service.getTasks(projectId, page, size));
-  }
-
   @GetMapping("/{id}")
   public ResponseEntity<TaskView> getTask(@PathVariable Long id) {
     return ResponseEntity.ok(service.getTask(id));
+  }
+
+  @PostMapping("/page")
+  public ResponseEntity<Page<TaskView>> getTasks(
+      @RequestParam Long projectId,
+      @Valid @RequestBody TaskPageableRequest pageRequest
+  ) {
+    return ResponseEntity.ok(service.getTasks(projectId, pageRequest));
   }
 
   @PostMapping

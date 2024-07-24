@@ -1,5 +1,6 @@
 package com.internship.todo.feature.project.service;
 
+import com.internship.todo.feature.project.dto.ProjectPageableRequest;
 import com.internship.todo.feature.project.dto.ProjectPostPutRequest;
 import com.internship.todo.feature.project.dto.ProjectView;
 import com.internship.todo.feature.project.entity.ProjectEntity;
@@ -9,7 +10,6 @@ import com.internship.todo.feature.user.repository.UserRepository;
 import com.internship.todo.infrastructure.security.service.UserDetailsAuthImp;
 import com.internship.todo.infrastructure.shared.exceptions.BadResponseException;
 import com.internship.todo.infrastructure.shared.mappers.ProjectMapper;
-import com.internship.todo.infrastructure.shared.validatiors.PageableValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,11 +27,12 @@ public class ProjectServiceImp implements ProjectService {
   private final UserDetailsAuthImp userDetailsAuthImp;
   private final ProjectMapper projectMapper;
 
-  public Page<ProjectView> getProjects(int page, int size) {
+  public Page<ProjectView> getProjects(ProjectPageableRequest dto) {
 
-    PageableValidator.validate(page, size);
-
-    Pageable pageable = PageRequest.of(page, size);
+    Pageable pageable = PageRequest.of(
+        dto.page() == null ? 0 : dto.page(),
+        dto.size() == null ? 10 : dto.size()
+    );
 
     return projectRepository
         .findAllByUser_Email(userDetailsAuthImp.getUsernameFromUserSecurity(), pageable)

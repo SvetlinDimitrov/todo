@@ -1,5 +1,6 @@
 package com.internship.todo.web;
 
+import com.internship.todo.feature.project.dto.ProjectPageableRequest;
 import com.internship.todo.feature.project.dto.ProjectPostPutRequest;
 import com.internship.todo.feature.project.dto.ProjectView;
 import com.internship.todo.feature.project.service.ProjectService;
@@ -17,17 +18,14 @@ public class ProjectController {
 
   private final ProjectService service;
 
-  @GetMapping
-  public ResponseEntity<Page<ProjectView>> getProjects(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "15") int size
-  ) {
-    return ResponseEntity.ok(service.getProjects(page, size));
-  }
-
   @GetMapping("/{id}")
   public ResponseEntity<ProjectView> getProject(@PathVariable Long id) {
     return ResponseEntity.ok(service.getProject(id));
+  }
+
+  @PostMapping("/page")
+  public ResponseEntity<Page<ProjectView>> getProjects(@Valid @RequestBody ProjectPageableRequest pageRequest) {
+    return ResponseEntity.ok(service.getProjects(pageRequest));
   }
 
   @PostMapping
