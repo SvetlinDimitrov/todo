@@ -7,15 +7,17 @@ import com.internship.todo.feature.task.dto.TaskPutRequest;
 import com.internship.todo.feature.task.dto.TaskView;
 import com.internship.todo.feature.task.entity.TaskEntity;
 import com.internship.todo.feature.task.repository.TaskRepository;
-import com.internship.todo.infrastructure.shared.mappers.TaskMapper;
 import com.internship.todo.infrastructure.security.service.UserDetailsAuthImp;
 import com.internship.todo.infrastructure.shared.exceptions.BadResponseException;
+import com.internship.todo.infrastructure.shared.mappers.TaskMapper;
 import com.internship.todo.infrastructure.shared.validatiors.PageableValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -46,10 +48,13 @@ public class TaskServiceImp implements TaskService {
     String userEmail = userDetailsAuthImp.getUsernameFromUserSecurity();
 
     ProjectEntity project = projectRepository.findByIdAndUser_Email(projectId, userEmail)
-        .orElseThrow(() -> new BadResponseException("Project not found"));
+        .orElseThrow(() -> new BadResponseException("Project with id " + projectId + " not found"));
 
     TaskEntity taskToSave = taskMapper.toTaskEntity(dto);
     taskToSave.setProject(project);
+    taskToSave.setCreationDate(LocalDateTime.now());
+    taskToSave.setUpdatedDate(LocalDateTime.now());
+    taskToSave.setDone(dto.done() != null && dto.done());
 
     taskRepository.save(taskToSave);
   }
@@ -60,6 +65,7 @@ public class TaskServiceImp implements TaskService {
     taskToUpdateAndSave.setName(dto.name());
     taskToUpdateAndSave.setDescription(dto.description());
     taskToUpdateAndSave.setDone(dto.done());
+    taskToUpdateAndSave.setUpdatedDate(LocalDateTime.now());
 
     taskRepository.save(taskToUpdateAndSave);
   }

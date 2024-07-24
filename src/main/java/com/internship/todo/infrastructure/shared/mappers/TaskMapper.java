@@ -10,6 +10,8 @@ import org.mapstruct.Mapping;
 public interface TaskMapper {
 
   @Mapping(target = "projectId", source = "entity.project.id")
+  @Mapping(target = "createdAt", source = "entity.creationDate")
+  @Mapping(target = "updatedAt", source = "entity.updatedDate")
   TaskView toTask(TaskEntity entity);
 
   TaskEntity toTaskEntity(TaskPostRequest dto);

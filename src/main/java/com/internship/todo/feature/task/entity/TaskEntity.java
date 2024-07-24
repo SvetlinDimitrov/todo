@@ -6,10 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "tasks")
 public class TaskEntity {
 
   @Id
@@ -24,6 +27,12 @@ public class TaskEntity {
 
   @Column
   private Boolean done = false;
+
+  @Column(name = "creation_date")
+  private LocalDateTime creationDate;
+
+  @Column(name = "updated_date")
+  private LocalDateTime updatedDate;
 
   @ManyToOne
   private ProjectEntity project;

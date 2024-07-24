@@ -50,19 +50,19 @@ public class ProjectServiceImp implements ProjectService {
     UserEntity user = userRepository.findByEmail(userEmail)
         .orElseThrow(() -> new BadResponseException("User not found"));
 
-    ProjectEntity projectToUpdateAndSave = projectMapper.toProjectEntity(dto);
-    projectToUpdateAndSave.setTasks(new ArrayList<>());
-    projectToUpdateAndSave.setUser(user);
+    ProjectEntity projectToCreate = projectMapper.toProjectEntity(dto);
+    projectToCreate.setTasks(new ArrayList<>());
+    projectToCreate.setUser(user);
 
-    projectRepository.save(projectToUpdateAndSave);
+    projectRepository.save(projectToCreate);
   }
 
   public void updateProject(Long id, ProjectPostPutRequest dto) {
 
-    ProjectEntity projectToSave = getEntityByIdAndUserEmail(id);
-    projectToSave.setName(dto.name());
+    ProjectEntity projectToUpdateAndSave = getEntityByIdAndUserEmail(id);
+    projectToUpdateAndSave.setName(dto.name());
 
-    projectRepository.save(projectToSave);
+    projectRepository.save(projectToUpdateAndSave);
   }
 
   public void deleteProject(Long id) {

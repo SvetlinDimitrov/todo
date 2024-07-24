@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "projects")
 public class ProjectEntity {
 
   @Id
