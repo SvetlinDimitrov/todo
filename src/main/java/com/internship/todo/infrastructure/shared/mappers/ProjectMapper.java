@@ -2,7 +2,7 @@ package com.internship.todo.infrastructure.shared.mappers;
 
 import com.internship.todo.feature.project.dto.ProjectPostPutRequest;
 import com.internship.todo.feature.project.dto.ProjectView;
-import com.internship.todo.feature.project.entity.ProjectEntity;
+import com.internship.todo.feature.project.entity.Project;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 public interface ProjectMapper {
 
   @Mapping(target = "userEmail", source = "entity.user.email")
-  ProjectView toProjectView(ProjectEntity entity);
+  ProjectView toProjectView(Project entity);
 
-  ProjectEntity toProjectEntity(ProjectPostPutRequest dto);
+  Project toProjectEntity(ProjectPostPutRequest dto);
 }

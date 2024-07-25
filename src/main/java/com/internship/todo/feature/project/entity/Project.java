@@ -1,7 +1,7 @@
 package com.internship.todo.feature.project.entity;
 
-import com.internship.todo.feature.task.entity.TaskEntity;
-import com.internship.todo.feature.user.entity.UserEntity;
+import com.internship.todo.feature.task.entity.Task;
+import com.internship.todo.feature.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "projects")
-public class ProjectEntity {
+public class Project {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +28,8 @@ public class ProjectEntity {
       orphanRemoval = true,
       cascade = {CascadeType.REMOVE}
   )
-  private List<TaskEntity> tasks;
+  private List<Task> tasks;
 
   @ManyToOne
-  private UserEntity user;
+  private User user;
 }

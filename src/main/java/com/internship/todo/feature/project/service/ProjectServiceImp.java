@@ -3,12 +3,14 @@ package com.internship.todo.feature.project.service;
 import com.internship.todo.feature.project.dto.ProjectPageableRequest;
 import com.internship.todo.feature.project.dto.ProjectPostPutRequest;
 import com.internship.todo.feature.project.dto.ProjectView;
-import com.internship.todo.feature.project.entity.ProjectEntity;
+import com.internship.todo.feature.project.entity.Project;
 import com.internship.todo.feature.project.repository.ProjectRepository;
-import com.internship.todo.feature.user.entity.UserEntity;
+import com.internship.todo.feature.user.entity.User;
 import com.internship.todo.feature.user.repository.UserRepository;
 import com.internship.todo.infrastructure.security.service.UserDetailsAuthImp;
-import com.internship.todo.infrastructure.shared.exceptions.BadResponseException;
+import com.internship.todo.infrastructure.shared.enums.ExceptionMessages;
+import com.internship.todo.infrastructure.shared.exceptions.ProjectNotFoundException;
+import com.internship.todo.infrastructure.shared.exceptions.UserNotFoundException;
 import com.internship.todo.infrastructure.shared.mappers.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -44,23 +46,25 @@ public class ProjectServiceImp implements ProjectService {
     return projectMapper.toProjectView(getEntityByIdAndUserEmail(id));
   }
 
-  public void createProject(ProjectPostPutRequest dto) {
+  public ProjectView createProject(ProjectPostPutRequest dto) {
 
     String userEmail = userDetailsAuthImp.getUsernameFromUserSecurity();
 
-    UserEntity user = userRepository.findByEmail(userEmail)
-        .orElseThrow(() -> new BadResponseException("User not found"));
+    User user = userRepository.findByEmail(userEmail)
+        .orElseThrow(() -> new UserNotFoundException(
+            String.format(ExceptionMessages.USER_NOT_FOUND.getMessage(), userEmail)
+        ));
 
-    ProjectEntity projectToCreate = projectMapper.toProjectEntity(dto);
+    Project projectToCreate = projectMapper.toProjectEntity(dto);
     projectToCreate.setTasks(new ArrayList<>());
     projectToCreate.setUser(user);
 
-    projectRepository.save(projectToCreate);
+    return projectMapper.toProjectView(projectRepository.save(projectToCreate));
   }
 
   public void updateProject(Long id, ProjectPostPutRequest dto) {
 
-    ProjectEntity projectToUpdateAndSave = getEntityByIdAndUserEmail(id);
+    Project projectToUpdateAndSave = getEntityByIdAndUserEmail(id);
     projectToUpdateAndSave.setName(dto.name());
 
     projectRepository.save(projectToUpdateAndSave);
@@ -71,11 +75,13 @@ public class ProjectServiceImp implements ProjectService {
     projectRepository.delete(getEntityByIdAndUserEmail(id));
   }
 
-  private ProjectEntity getEntityByIdAndUserEmail(Long id) {
+  private Project getEntityByIdAndUserEmail(Long id) {
 
     String userEmail = userDetailsAuthImp.getUsernameFromUserSecurity();
 
     return projectRepository.findByIdAndUser_Email(id, userEmail)
-        .orElseThrow(() -> new BadResponseException("Project not found"));
+        .orElseThrow(() -> new ProjectNotFoundException(
+            String.format(ExceptionMessages.PROJECT_NOT_FOUND.getMessage(), id, userEmail)
+        ));
   }
 }

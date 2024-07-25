@@ -19,8 +19,8 @@ public class TaskController {
 
   private final TaskService service;
 
-  @GetMapping("/{id}")
-  public ResponseEntity<TaskView> getTask(@PathVariable Long id) {
+  @GetMapping
+  public ResponseEntity<TaskView> getTask(@RequestParam Long id) {
     return ResponseEntity.ok(service.getTask(id));
   }
 
@@ -33,19 +33,18 @@ public class TaskController {
   }
 
   @PostMapping
-  public ResponseEntity<?> createTask(@RequestParam Long projectId, @Valid @RequestBody TaskPostRequest task) {
-    service.createTask(task, projectId);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+  public ResponseEntity<TaskView> createTask(@RequestParam Long projectId, @Valid @RequestBody TaskPostRequest task) {
+    return new ResponseEntity<>(service.createTask(task, projectId), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateTask(@PathVariable Long id, @Valid @RequestBody TaskPutRequest task) {
+  public ResponseEntity<Void> updateTask(@PathVariable Long id, @Valid @RequestBody TaskPutRequest task) {
     service.updateTask(id, task);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteTask(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
     service.deleteTask(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }

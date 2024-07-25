@@ -1,6 +1,6 @@
 package com.internship.todo.feature.user.entity;
 
-import com.internship.todo.feature.project.entity.ProjectEntity;
+import com.internship.todo.feature.project.entity.Project;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +26,5 @@ public class UserEntity {
   private String password;
 
   @OneToMany(mappedBy = "user")
-  private List<ProjectEntity> projects;
+  private List<Project> projects;
 }

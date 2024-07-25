@@ -11,7 +11,7 @@ public interface ProjectService {
 
   ProjectView getProject(Long id);
 
-  void createProject(ProjectPostPutRequest dto);
+  ProjectView createProject(ProjectPostPutRequest dto);
 
   void updateProject(Long id, ProjectPostPutRequest dto);
 

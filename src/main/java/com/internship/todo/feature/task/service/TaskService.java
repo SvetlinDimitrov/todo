@@ -12,7 +12,7 @@ public interface TaskService {
 
   TaskView getTask(Long id);
 
-  void createTask(TaskPostRequest dto, Long projectId);
+  TaskView createTask(TaskPostRequest dto, Long projectId);
 
   void updateTask(Long id, TaskPutRequest dto);
 

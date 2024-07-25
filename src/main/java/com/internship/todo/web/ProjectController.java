@@ -18,8 +18,8 @@ public class ProjectController {
 
   private final ProjectService service;
 
-  @GetMapping("/{id}")
-  public ResponseEntity<ProjectView> getProject(@PathVariable Long id) {
+  @GetMapping
+  public ResponseEntity<ProjectView> getProject(@RequestParam Long id) {
     return ResponseEntity.ok(service.getProject(id));
   }
 
@@ -29,19 +29,18 @@ public class ProjectController {
   }
 
   @PostMapping
-  public ResponseEntity<?> createProject(@Valid @RequestBody ProjectPostPutRequest task) {
-    service.createProject(task);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+  public ResponseEntity<ProjectView> createProject(@Valid @RequestBody ProjectPostPutRequest task) {
+    return new ResponseEntity<>(service.createProject(task), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectPostPutRequest task) {
+  public ResponseEntity<Void> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectPostPutRequest task) {
     service.updateProject(id, task);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteProject(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
     service.deleteProject(id);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }

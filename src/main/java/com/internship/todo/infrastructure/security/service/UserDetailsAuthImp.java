@@ -1,6 +1,6 @@
 package com.internship.todo.infrastructure.security.service;
 
-import com.internship.todo.feature.user.entity.UserEntity;
+import com.internship.todo.feature.user.entity.User;
 import com.internship.todo.feature.user.repository.UserRepository;
 import com.internship.todo.infrastructure.security.dto.UserDetailsDto;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UserDetailsAuthImp implements UserDetailsService , UserAuthService 
     return authentication.getName();
   }
 
-  private UserDetailsDto toUserAuth(UserEntity user) {
+  private UserDetailsDto toUserAuth(User user) {
     return new UserDetailsDto(user);
   }
 }

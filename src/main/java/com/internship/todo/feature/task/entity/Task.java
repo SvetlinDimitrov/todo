@@ -1,6 +1,6 @@
 package com.internship.todo.feature.task.entity;
 
-import com.internship.todo.feature.project.entity.ProjectEntity;
+import com.internship.todo.feature.project.entity.Project;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "tasks")
-public class TaskEntity {
+public class Task {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +35,5 @@ public class TaskEntity {
   private LocalDateTime updatedDate;
 
   @ManyToOne
-  private ProjectEntity project;
+  private Project project;
 }

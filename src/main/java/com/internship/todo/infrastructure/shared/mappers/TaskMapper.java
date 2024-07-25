@@ -2,7 +2,7 @@ package com.internship.todo.infrastructure.shared.mappers;
 
 import com.internship.todo.feature.task.dto.TaskPostRequest;
 import com.internship.todo.feature.task.dto.TaskView;
-import com.internship.todo.feature.task.entity.TaskEntity;
+import com.internship.todo.feature.task.entity.Task;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -12,8 +12,8 @@ public interface TaskMapper {
   @Mapping(target = "projectId", source = "entity.project.id")
   @Mapping(target = "createdAt", source = "entity.creationDate")
   @Mapping(target = "updatedAt", source = "entity.updatedDate")
-  TaskView toTask(TaskEntity entity);
+  TaskView toTask(Task entity);
 
-  TaskEntity toTaskEntity(TaskPostRequest dto);
+  Task toTaskEntity(TaskPostRequest dto);
 
 }
