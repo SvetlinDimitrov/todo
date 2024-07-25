@@ -3,14 +3,17 @@ package com.internship.todo.feature.task.entity;
 import com.internship.todo.feature.project.entity.Project;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "tasks")
 public class Task {
@@ -36,4 +39,30 @@ public class Task {
 
   @ManyToOne
   private Project project;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Task task = (Task) o;
+    return Objects.equals(id, task.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
+  }
+
+  @Override
+  public String toString() {
+    return "Task{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", done=" + done +
+        ", creationDate=" + creationDate +
+        ", updatedDate=" + updatedDate +
+        ", project=" + project +
+        '}';
+  }
 }

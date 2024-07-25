@@ -3,15 +3,15 @@ package com.internship.todo.feature.project.entity;
 import com.internship.todo.feature.task.entity.Task;
 import com.internship.todo.feature.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "projects")
 public class Project {
@@ -32,4 +32,27 @@ public class Project {
 
   @ManyToOne
   private User user;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Project project = (Project) o;
+    return Objects.equals(id, project.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
+  }
+
+  @Override
+  public String toString() {
+    return "Project{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", tasks=" + tasks +
+        ", user=" + user +
+        '}';
+  }
 }

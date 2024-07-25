@@ -1,6 +1,5 @@
 package com.internship.todo.feature.project.service;
 
-import com.internship.todo.feature.project.dto.ProjectPageableRequest;
 import com.internship.todo.feature.project.dto.ProjectPostPutRequest;
 import com.internship.todo.feature.project.dto.ProjectView;
 import com.internship.todo.feature.project.entity.Project;
@@ -14,11 +13,11 @@ import com.internship.todo.infrastructure.shared.exceptions.UserNotFoundExceptio
 import com.internship.todo.infrastructure.shared.mappers.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,16 +28,17 @@ public class ProjectServiceImp implements ProjectService {
   private final UserDetailsAuthImp userDetailsAuthImp;
   private final ProjectMapper projectMapper;
 
-  public Page<ProjectView> getProjects(ProjectPageableRequest dto) {
+  public Page<ProjectView> getProjects(Pageable pageable, String filterByName) {
+    String userEmail = userDetailsAuthImp.getUsernameFromUserSecurity();
 
-    Pageable pageable = PageRequest.of(
-        dto.page() == null ? 0 : dto.page(),
-        dto.size() == null ? 10 : dto.size()
-    );
-
-    return projectRepository
-        .findAllByUser_Email(userDetailsAuthImp.getUsernameFromUserSecurity(), pageable)
-        .map(projectMapper::toProjectView);
+    return Optional.ofNullable(filterByName)
+        .map(name -> projectRepository
+            .findAllByUser_EmailAndNameContaining(userEmail, name, pageable)
+            .map(projectMapper::toProjectView)
+        )
+        .orElse(projectRepository
+            .findAllByUser_Email(userEmail, pageable)
+            .map(projectMapper::toProjectView));
   }
 
   public ProjectView getProject(Long id) {

@@ -1,12 +1,12 @@
 package com.internship.todo.web;
 
-import com.internship.todo.feature.project.dto.ProjectPageableRequest;
 import com.internship.todo.feature.project.dto.ProjectPostPutRequest;
 import com.internship.todo.feature.project.dto.ProjectView;
 import com.internship.todo.feature.project.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +18,18 @@ public class ProjectController {
 
   private final ProjectService service;
 
+
   @GetMapping
-  public ResponseEntity<ProjectView> getProject(@RequestParam Long id) {
-    return ResponseEntity.ok(service.getProject(id));
+  public ResponseEntity<Page<ProjectView>> getProjects(
+      @RequestParam(required = false) String filterByName,
+      Pageable pageable
+  ) {
+    return ResponseEntity.ok(service.getProjects(pageable , filterByName));
   }
 
-  @PostMapping("/page")
-  public ResponseEntity<Page<ProjectView>> getProjects(@Valid @RequestBody ProjectPageableRequest pageRequest) {
-    return ResponseEntity.ok(service.getProjects(pageRequest));
+  @GetMapping("/{id}")
+  public ResponseEntity<ProjectView> getProject(@PathVariable Long id) {
+    return ResponseEntity.ok(service.getProject(id));
   }
 
   @PostMapping

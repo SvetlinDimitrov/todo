@@ -2,12 +2,13 @@ package com.internship.todo.feature.task.service;
 
 import com.internship.todo.feature.project.entity.Project;
 import com.internship.todo.feature.project.repository.ProjectRepository;
-import com.internship.todo.feature.task.dto.TaskPageableRequest;
+import com.internship.todo.feature.task.dto.TaskFilter;
 import com.internship.todo.feature.task.dto.TaskPostRequest;
 import com.internship.todo.feature.task.dto.TaskPutRequest;
 import com.internship.todo.feature.task.dto.TaskView;
 import com.internship.todo.feature.task.entity.Task;
 import com.internship.todo.feature.task.repository.TaskRepository;
+import com.internship.todo.feature.task.specification.TaskSpecification;
 import com.internship.todo.infrastructure.security.service.UserDetailsAuthImp;
 import com.internship.todo.infrastructure.shared.enums.ExceptionMessages;
 import com.internship.todo.infrastructure.shared.exceptions.ProjectNotFoundException;
@@ -15,8 +16,8 @@ import com.internship.todo.infrastructure.shared.exceptions.TaskNotFoundExceptio
 import com.internship.todo.infrastructure.shared.mappers.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,15 +31,13 @@ public class TaskServiceImp implements TaskService {
   private final UserDetailsAuthImp userDetailsAuthImp;
   private final TaskMapper taskMapper;
 
-  public Page<TaskView> getTasks(Long projectId, TaskPageableRequest dto) {
+  public Page<TaskView> getTasks(TaskFilter filterCriteria, Pageable pageable) {
+
     String userEmail = userDetailsAuthImp.getUsernameFromUserSecurity();
 
-    Pageable pageable = PageRequest.of(
-        dto.page() == null ? 0 : dto.page(),
-        dto.size() == null ? 10 : dto.size()
-    );
+    Specification<Task> specification = TaskSpecification.filterByCriteria(filterCriteria, userEmail);
 
-    return taskRepository.findAllByProject_IdAndProject_User_Email(projectId, userEmail, pageable)
+    return taskRepository.findAll(specification, pageable)
         .map(taskMapper::toTask);
   }
 
