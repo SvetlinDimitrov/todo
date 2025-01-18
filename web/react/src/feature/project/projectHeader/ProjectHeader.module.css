@@ -1,0 +1,32 @@
+.headerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.tickButton, .addButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 10px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.tickButton {
+    background-color: #FF0000;
+}
+
+
+.projectName {
+    font-size: 2.5rem;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+}

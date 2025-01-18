@@ -1,0 +1,13 @@
+.profilePic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+.profileName {
+    text-align: center;
+    color: #333;
+    font-size: 20px;
+}

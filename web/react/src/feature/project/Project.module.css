@@ -1,0 +1,11 @@
+.projectContainer {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  text-align: center;
+  margin-top: 30px;
+  gap: 20px;
+}

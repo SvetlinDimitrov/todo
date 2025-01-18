@@ -1,0 +1,39 @@
+
+.taskContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    border: 2px solid #ccc;
+    padding: 14px;
+    overflow-y: auto;
+    width: 400px;
+    max-height: 200px;
+}
+
+.taskDiv {
+    padding: 4px;
+    text-align: center;
+    height: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+.taskDiv:hover {
+    cursor: pointer;
+    font-style: italic;
+}
+
+.noTasks {
+    padding: 20px;
+    text-align: center;
+    color: #20B2AA;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    margin: 20px;
+    background-color: #f0f8ff;
+}
+
+.taskCompleted {
+  text-decoration: line-through;
+  background-color: #D3D3D3;
+}

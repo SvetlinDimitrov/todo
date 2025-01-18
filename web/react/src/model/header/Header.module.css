@@ -1,0 +1,33 @@
+.header {
+  background-color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+  height: 30px;
+}
+.nav {
+  display: flex;
+  align-items: center;
+}
+.homeLink {
+  color: #333;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  width: 45%;
+}
+
+.profilePic {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.profileName {
+  margin: 0;
+}
