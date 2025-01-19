@@ -1,7 +1,10 @@
-package com.todo.userservice.entity;
+package com.todo.userservice.domain.entity;
 
+import com.todo.entity.AuditableEntity;
+import com.todo.entity.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,16 +13,16 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user_details")
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class User extends AuditableEntity {
+public class UserDetails extends AuditableEntity {
 
-  @Column(nullable = false, unique = true)
-  private String email;
+  @Column(nullable = false)
   private String username;
-  private String password;
+  @OneToOne
+  private User user;
 }
